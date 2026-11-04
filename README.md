@@ -7,10 +7,51 @@ Modern 3D drawing styles and GUI skins for [Olex2](https://www.olexsys.org):
 
 ![Olex2 with the flexokidark skin and the flexoki_dark 3D style](docs/olex2_gui_flexokidark.png)
 
-The 3D styles keep the familiar colours of the organic atoms (C, H, N, O, F, Cl, S) based on the `light_g.glsp` style and give the metals a new palette based on their chemical familiarity. 
+## Atom colours
 
-The d-block metals, lanthanides and main-group metal colors are based on their physical appareance, chemical or physical properties while remaining distinct from each other and from the ligand atoms around them.
+- Alkali and alkaline-earth metals (except Be), actinides, noble gases, H, N, O, Cl, S and the remaining non-metals (B, P, As, Se, Te) colours are taken from Olex2's `light_g`. C and F colors are modified versions of the `light_g` color: C is a bit darker so H stands out, F a little greener so it parts from S.
+- Colors for most of the elements are hand-picked to resemble their physical appareance, compounds colors or their physical properties.
+- The rest of the d-block and main-group metals are spread out in OKLCH, a perceptually uniform colour space. The 3d row is kept vivid, the 4d row are light pastels, the 5d row are deep tones. The dark styles lighten dark atoms so they show on the dark background.
+- Colors are kept distinct by measuring their OKLab distances and nudging elements that came too close to other elements that commonly appear around them and/or to the background. Elements that share close colors (e.g.: Pd and Ag) rarely appear in the same crystal structure.
 
+The hand-picked colours, as they appear in the light styles (the dark styles lighten the darkest ones):
+
+| Element | Colour | Reason |
+|---|---|---|
+| Be | soft green `#A3E196` | Matches Mg and Ca; `light_g` gave Be the same cyan as He |
+| Fe | rust red `#9F3C26` | Iron oxide |
+| Co | cobalt blue `#3B68DB` | Cobalt blue pigment |
+| Ni | green `#549F0D` | Green Ni<sup>2+</sup> salts |
+| Cu | copper `#D08C63` | Copper metal |
+| Ru | crimson `#A61F47` | Ruthenium red histology stain |
+| Pd | cool silver `#A0B0BC` | Palladium metal |
+| Ag | cool silver `#C1D4E5` | Silver metal |
+| Cd | vivid orange `#F56600` | Cadmium pigments |
+| Ta | blackish gunmetal `#34364D` | Tantallum metal |
+| W | blackish gunmetal `#344344` | Tungsten metal |
+| Os | silvery blue `#7AA3C8` | Osmium metal |
+| Ir | deep indigo `#24418D` with an iridescent shine | Named after Iris, the rainbow, for its colourful salts |
+| Pt | warm silver `#B8B4AA` | Platinum metal |
+| Au | gold `#E39F20` | Gold metal |
+| Hg | dark liquid metal `#667175` | Mercury |
+| La | pearl `#D3B08F` | White La<sub>2</sub>O<sub>3</sub>; Greek *lanthanein*, "to lie hidden" |
+| Ce | orange `#DB7E00` | Ceric ammonium nitrate |
+| Pr | leek green `#7B9040` | Pr<sup>3+</sup> salts; Greek *prasios*, "leek green" |
+| Nd | lilac `#C18ED1` | Nd<sup>3+</sup> salts, lilac in daylight |
+| Pm | pink `#F0A6B6` | Pink Pm<sup>3+</sup> salts |
+| Sm | indigo `#483A9A` | SmI<sub>2</sub> (Kagan's reagent); kept apart from Nd's lilac |
+| Eu | red `#E85339` | Red Eu<sup>3+</sup> luminescence (~612 nm) |
+| Gd | teal `#11A6AA` | Gd(III) MRI contrast agents |
+| Tb | green `#94D53C` | Green Tb<sup>3+</sup> luminescence (~545 nm) |
+| Dy | light sand `#E4CF9D` | Dy<sub>2</sub>O<sub>3</sub> sand |
+| Ho | Stockholm blue `#0068A5` | *Holmia*, Latin for Stockholm |
+| Er | rose `#DA709D` | Er<sup>3+</sup> salts |
+| Tm | blue `#2EA2E5` | Blue Tm<sup>3+</sup> luminescence (~480 nm) |
+| Yb | salmon red `#E97871` | Yb<sup>3+</sup> near-infrared emission |
+| Lu | grey-blue `#698AA9` | *Lutetia*, Latin for Paris, and its zinc roofs |
+| Si | light beige `#DBB68D` | Lighter and calmer than `light_g`'s olive |
+| Br | deep red `#831922` | Liquid bromine |
+| I | violet `#6D1C79` | Violet iodine vapour |
 
 | modern | modern_dark |
 |---|---|

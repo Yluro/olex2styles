@@ -313,8 +313,13 @@ MAIN_GROUP_METALS = {
     "Pb": (0.42, 0.030, 265), "Sb": (0.66, 0.081, 346), "Bi": (0.48, 0.130, 325),
 }
 
+# s-block metals recoloured; the rest of the s-block keeps its light_g colour
+S_BLOCK = {
+    "Be": (0.85, 0.120, 140),  # soft green like Mg and Ca, instead of light_g's He cyan
+}
+
 # every reworked metal colour in one lookup
-PALETTE = {**D_BLOCK, **LN_PALETTE, **MAIN_GROUP_METALS}
+PALETTE = {**D_BLOCK, **LN_PALETTE, **MAIN_GROUP_METALS, **S_BLOCK}
 
 # light_g materials copied unchanged: the organic and ligand atoms everyone
 # already recognises
@@ -327,6 +332,8 @@ KEEP_HUE = {"F": 10}
 # non-metals recoloured away from their light_g hue (otherwise light_g's is used)
 NONMETALS = {
     "Br": (0.40, 0.14, 22),    # liquid Br2 deep red, instead of light_g brown
+    "I": (0.40, 0.16, 322),    # iodine-vapour violet, instead of light_g's dark magenta
+    "Si": (0.80, 0.07, 70),    # light beige, instead of light_g olive
 }
 
 
