@@ -480,14 +480,36 @@ def recolour(m, c):
 #                      None = no lift
 #   messages           console message colours, by message kind
 #   overrides          per-element exceptions to the lift (dark themes only)
+#   map_pos, map_neg   electron-density map surfaces (positive, negative)
+#   map                map surface material settings, MAP_LIGHT or MAP_DARK (map_mat)
+
+# Map surfaces. light_g's were pure green / red at 60 % opacity with a white
+# highlight: on a light background the grey showing through and the highlight
+# washed them out. Chosen by rendering variants side by side: light themes need
+# near-opaque surfaces and less light (ambient and diffuse below the colour, so
+# the lit side stays saturated instead of blowing out); dark themes keep some
+# see-through and more glow. The highlight takes the map colour (tint 1 = all
+# map colour, 0 = white), which keeps red from turning salmon.
+MAP_LIGHT = dict(alpha=0.94, ambient=0.45, diffuse=0.85, specular=0.30, tint=0.9,
+                 glow=0.08, shine=40)
+MAP_DARK = dict(alpha=0.85, ambient=0.6, diffuse=1.0, specular=0.35, tint=0.8,
+                glow=0.20, shine=48)
+# Flexoki's 600 shades are darker than the modern colours; at MAP_LIGHT's lower
+# light the mesh (the default map view) read too dark on the sand background
+MAP_FLEXOKI_LIGHT = dict(MAP_LIGHT, ambient=0.6, diffuse=1.0, glow=0.15)
+
 THEMES = {
     "modern": dict(bg="#E4E5E8", bg_top="#EEEFF2", bg_bottom="#DADCE0",
                    text="#262B33", text_mid="#4A505A", console="#3B5378", pivot=None,
                    messages=dict(Error="#B8362B", Exception="#B8362B", Warning="#A86A00",
                                  Info="#2B5EA8", Help_cmd="#7A6200", Help_txt="#00737A",
-                                 Exec="#3B5378")),
+                                 Exec="#3B5378"),
+                   # vivid emerald and red, OKLCH (0.68, 0.24, 146) / (0.64, 0.23, 25)
+                   map_pos="#00B83B", map_neg="#F9343C", map=MAP_LIGHT),
     # charcoal like a dark-mode code editor; same as the moderndark panel
     "modern_dark": dict(bg="#2B2D31", bg_top="#313337", bg_bottom="#26282B",
+                        # OKLCH (0.74, 0.22, 145) / (0.66, 0.21, 25)
+                        map_pos="#27CC44", map_neg="#F84B4B", map=MAP_DARK,
                         text="#D4D7DD", text_mid="#A3A9B3", console="#8DB3E2", pivot=0.58,
                         messages=dict(Error="#FF7A6B", Exception="#FF7A6B", Warning="#F0B44C",
                                       Info="#7FB2FF", Help_cmd="#F2D35B", Help_txt="#5CD6D6",
@@ -509,7 +531,9 @@ THEMES = {
                           messages=dict(Error="#AF3029", Exception="#AF3029",
                                         Warning="#BC5215", Info="#205EA6",
                                         Help_cmd="#8E6B01", Help_txt="#24837B",
-                                        Exec="#403E3C")),
+                                        Exec="#403E3C"),
+                          # cyan-600 / red-400: Flexoki's olive green vanished on the sand
+                          map_pos="#24837B", map_neg="#D14D41", map=MAP_FLEXOKI_LIGHT),
 }
 # behind the modern_dark atoms: base-900, gradient base-850 to base-950, text tx /
 # base-300; messages in 300 shades, since 400 read dim on base-900
@@ -520,7 +544,8 @@ THEMES["flexoki_dark"] = dict(bg="#282726", bg_top="#343331", bg_bottom="#1C1B1A
                                             Warning="#EC8B49", Info="#66A0C8",
                                             Help_cmd="#DFB431", Help_txt="#5ABDAC",
                                             Exec="#B7B5AC"),
-                              overrides=THEMES["modern_dark"]["overrides"])
+                              overrides=THEMES["modern_dark"]["overrides"],
+                              map_pos="#879A39", map_neg="#D14D41", map=MAP_DARK)  # green-400 / red-400
 
 
 def overlays(t):
@@ -533,7 +558,8 @@ def overlays(t):
         ("Cursor", "Text"): console,
         ("AtomLegend", "Text"): mid,
         ("PLabels", "Text"): mid,
-        ("XGrid_Label", "Text"): mid,
+        # emissive text comes out lighter than its colour; mid went pale on light
+        ("XGrid_Label", "Text"): text,
         ("db_label", "Text"): mid,
         ("duc_label", "Text"): mid,
         ("HelpWindow", "Text"): mid,
@@ -547,6 +573,22 @@ def emissive_text(c):
     # ambient (black) + diffuse + emission, transparent, drawn as an overlay
     flags = 0x1 | 0x4 | 0x100 | 0x400 | 0x800
     return "%d;%d;%d;%d" % (flags, pack((0, 0, 0)), pack(c), pack(c))
+
+
+# bitmap-font overlay text that gets emissive_text instead of a recolour
+EMISSIVE_TEXT = {("Labels", "Text"), ("XGrid_Label", "Text")}
+
+
+def map_mat(c, m):
+    """Transparent map iso-surface material from settings m, both faces alike."""
+    # transparent; ambient, diffuse, specular, shininess and emission, front + back
+    flags = 0x400 | 0x3 | 0xC | 0x30 | 0xC0 | 0x300
+    a = m["alpha"]
+    amb, dif = pack(scale(c, m["ambient"]), a), pack(scale(c, m["diffuse"]), a)
+    spec = pack(scale(mix(WHITE, c, m["tint"]), m["specular"]), a)
+    ems = pack(scale(c, m["glow"]), a)
+    return ";".join(str(v) for v in (flags, amb, amb, dif, dif, spec, spec,
+                                     m["shine"], m["shine"], ems, ems))
 
 
 def lift_shift(c, t, name=None):
@@ -653,7 +695,7 @@ def build(src, finish, rims, theme):
             for p in e.children:
                 key = (name, p.get("PName"))
                 m = p.child("Material")
-                if key == ("Labels", "Text") and m is not None:
+                if key in EMISSIVE_TEXT and m is not None:
                     m.fields = [(None, emissive_text(over[key]))]
                 elif name == "Cursor" and m is not None:
                     # light_g's cursor is ambient-only, so it showed at ~0.34x;
@@ -663,6 +705,14 @@ def build(src, finish, rims, theme):
                 elif key in over and m is not None:
                     s = props[m.value.split(".")[-1]]
                     m.fields = [(None, recolour(s, over[key]))]
+        if name == "XGrid":
+            # electron-density map: "+Surface" / "-Surface" are the iso-surfaces
+            # (also used for the mesh); eMap and the contour plane stay as in light_g
+            sign = {"+Surface": t["map_pos"], "-Surface": t["map_neg"]}
+            for p in e.children:
+                if p.get("PName") in sign:
+                    p.child("Material").fields = [
+                        (None, map_mat(hex_rgb(sign[p.get("PName")]), t["map"]))]
         if name == "Background":
             # gradient corners: A and B at the bottom, C and D at the top
             for k, col in (("A", t["bg_bottom"]), ("B", t["bg_bottom"]),
