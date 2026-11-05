@@ -5,7 +5,7 @@ Modern 3D drawing styles and GUI skins for [Olex2](https://www.olexsys.org):
 - **modern**: neutral greys with vivid accents, light and dark.
 - [**Flexoki**](https://stephango.com/flexoki): Steph Ango's warm, ink-on-paper colour scheme, light and dark.
 
-![Olex2 with the flexokidark skin and the flexoki_dark 3D style](docs/olex2_gui_flexokidark.png)
+![Olex2's Work > Refine panel during a refinement, with the modern skin and style (left) and moderndark with modern_dark (right)](docs/olex2_gui_modern_banner.png)
 
 ## Atom colours
 
