@@ -71,6 +71,29 @@ The hand-picked colours, as they appear in the light styles (the dark styles lig
 
 _Note: When swapping skins, Olex can hides the results grid and some of the plugin tabs. `restart` solves this issue._ 
 
+### Fonts
+
+The skins draw the title block, tabs and section headers in Trebuchet MS and the panel text in Segoe UI; both come with Windows.
+
+### macOS
+
+macOS has Trebuchet MS under a different file name than Olex2 expects, and no Segoe UI. The add-on `etc/skins/macos.phil` adapts any skin:
+
+1. Copy `etc/` into Olex2 as above. Then copy the Mac's own Trebuchet MS into Olex2's spare font slot:
+
+   ```bash
+   sh macos/install-trebuchet.sh /path/to/olex2
+   ```
+
+   `/path/to/olex2` is the folder that holds Olex2's `etc`.
+2. Pick a skin with `_macos` after its name:
+
+   ```
+   skin modern_macos
+   ```
+
+The add-on also uses the Mac system font for panel text and the taller controls of Olex2's own Mac skin. It has not been tested on a Mac yet.
+
 
 | Skins | 3D style |
 |---|---|
@@ -107,7 +130,7 @@ Tested with Olex2 1.5 (2026.10.05) on Windows 10; only the four orange default s
 - The green "Refinement finished" status line.
 - The white text on action buttons.
 - Some graph colours.
-- The font of tab and button images.
+- The font of the results-grid cells and of the file path in the title block (Olex2's Signika).
 
 The 3D label font is Segoe UI, so other systems fall back to Olex2's default font.
 
