@@ -112,6 +112,7 @@ Tested with Olex2 1.5 (2026.10.05) on Windows 10; only the four orange default s
 - The green "Refinement finished" status line.
 - The white text on action buttons.
 - Some graph colours.
+- The colours of the data/parameter battery (Olex2's own bright green, yellow, orange and red).
 - The font of the results-grid cells and of the file path in the title block (Olex2's Signika).
 
 ### macOS fonts (help wanted)
