@@ -69,7 +69,7 @@ The hand-picked colours, as they appear in the light styles (the dark styles lig
    load style flexoki_dark
    ```
 
-_Note: When swapping skins, Olex can hides the results grid and some of the plugin tabs. `restart` solves this issue._ 
+_Note: When swapping skins, Olex can hide the results grid and some of the plugin tabs. `restart` solves this issue._ 
 
 
 | Skins | 3D style |
