@@ -95,8 +95,7 @@ These come from Olex2 or Windows; a skin can't fix them.
 
 - **Olex2-derived files:** `light_g.glds`/`.glsp` are Olex2's files, and the generated `.glds`/`.glsp` styles are derived from them. Olex2's terms are in `licence.rtf` in the Olex2 installation. The README and LICENSE should say that MIT covers the script and skins, and mention where the Olex2-derived files come from.
 - **Flexoki:** by Steph Ango, MIT-licensed (github.com/kepano/flexoki); please confirm. Credit it in the README.
-- **Preview image:** `docs/panels_default_skins.png` shows a local Windows path containing the user's account name in the title blocks. Ask before publishing it, or crop it.
-- **Mock-up image:** `docs/skin_catalogue.png` is drawn from the palettes and is not an Olex2 screenshot; the other images are real renders.
+- **Preview images:** the banner, `docs/panels_default_skins.png` and `docs/skin_catalogue.png` are real Olex2 renders of the `win` skins. They load the structure from a neutral folder (`D:\olex2styles-demo`), so no account name shows in the title block; keep it that way when re-rendering.
 
 ## How the 3D styles are built
 

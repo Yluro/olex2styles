@@ -88,7 +88,7 @@ _Note: When swapping skins, Olex can hide the results grid and some of the plugi
 
 The plain family name uses an orange accent, the closest to the original Olex2 look. The other names swap the accent colour:
 
-![All 20 skins (mock-up)](docs/skin_catalogue.png)
+![All 20 skins in Olex2](docs/skin_catalogue.png)
 
 ## Regenerate
 
