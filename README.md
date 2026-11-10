@@ -112,7 +112,7 @@ Tested with Olex2 1.5 (2026.10.05) on Windows 10; only the four orange default s
 - The green "Refinement finished" status line.
 - The white text on action buttons.
 - Some graph colours.
-- The colours of the data/parameter battery (Olex2's own bright green, yellow, orange and red).
+- The colours of the data/parameter battery (Olex2's own bright green, yellow, orange and red); see [Battery colours](#battery-colours-optional-olex2-edit) for a workaround.
 - The font of the results-grid cells and of the file path in the title block (Olex2's Signika).
 
 ### macOS fonts (help wanted)
@@ -124,6 +124,34 @@ The macOS version keeps Olex2's default fonts, because the Windows choices don't
 - The 3D label fonts are stored as Windows font strings, and the Mac equivalent is not known yet.
 
 If you run Olex2 on a Mac and can test font settings, contributions are welcome.
+
+### Battery colours (optional Olex2 edit)
+
+Olex2 reads the battery's colours once at start-up, before any skin is loaded, so the battery keeps Olex2's own colours. A small change to Olex2's code makes it use the skin's green, yellow, orange and red instead. It edits one of Olex2's own files, so keep a copy of the original; an Olex2 update will undo it.
+
+1. In your Olex2 folder, open `util/pyUtil/gui/tools/__init__.py` and find `def get_battery_image`.
+2. Replace these lines:
+
+   ```python
+     d_col = {'green': gui_green,
+              'yellow': gui_yellow,
+              'orange': gui_orange,
+              'red': gui_red}
+   ```
+
+   with:
+
+   ```python
+     d_col = {'green': OV.GetParam('gui.green'),
+              'yellow': OV.GetParam('gui.dark_yellow'),
+              'orange': OV.GetParam('gui.orange'),
+              'red': OV.GetParam('gui.red')}
+   ```
+
+   Keep the two-space indentation of the surrounding code.
+3. Restart Olex2. If the battery still has the old colours, run `skin <name>` once to redraw it.
+
+Tested with Olex2 1.5 (2026.10.05) on Windows.
 
 ## Credits and license
 
